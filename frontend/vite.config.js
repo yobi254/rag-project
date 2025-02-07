@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist',
+    outDir: 'DEPLOY_GH_PAGE',
     assetsDir: 'assets', // Ensures assets are properly copied
   },
 });
