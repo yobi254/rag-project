@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import './Main.css';
 import { assets } from '../../assets/assets';
 import Loader from '../Loader/Loader';
@@ -68,7 +70,11 @@ export const Main = () => {
             </div>
           </div>
           {loading && <Loader />}
-          {response && <p className="response-box">{response}</p>}
+          {response && (
+            <div className="response-box">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{response}</ReactMarkdown>
+            </div>
+          )}
           <p className="bottom-info">Gemini may display incorrect information.</p>
         </div>
       </div>
