@@ -16,7 +16,7 @@ export const Main = () => {
     setResponse(null);
 
     try {
-      const res = await fetch("http://localhost:8000/ask", {
+      const res = await fetch("https://rag-project-production.up.railway.app/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: input }),
