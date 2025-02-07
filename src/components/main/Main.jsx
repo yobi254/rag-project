@@ -1,54 +1,50 @@
-import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import './Main.css';
-import { assets } from '../../assets/assets';
-import Loader from '../Loader/Loader';
+import React, { useState } from "react";
+import "./Main.css";
+import { assets } from "../../assets/assets";
+import ReactMarkdown from "react-markdown";
+import Loader from "../Loader/Loader";
 
 export const Main = () => {
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [input, setInput] = useState("");
+  const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
 
-  const handleSend = async () => {
-    if (!prompt.trim()) return;
+  const sendMessage = async () => {
+    if (!input.trim()) return; // Prevent empty input
+
     setLoading(true);
-    setResponse('');
-    setShowPopup(false);
+    setResponse(null);
 
     try {
-      const res = await fetch('http://localhost:8000/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: prompt }),
+      const res = await fetch("http://localhost:8000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: input }),
       });
 
       const data = await res.json();
-      setResponse(data.answer || 'No response received.');
-      setShowPopup(true);
+      setResponse(data.answer);
     } catch (error) {
-      setResponse('Error fetching response.');
-      setShowPopup(true);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching response:", error);
+      setResponse("Error getting response. Try again!");
     }
+
+    setLoading(false);
+    setInput(""); // Clear input after sending
   };
 
   return (
     <div className="main">
       <div className="nav">
         <p>Gemini</p>
-        <img src={assets.user_icon} alt="User Icon" />
+        <img src={assets.user_icon} alt="" />
       </div>
-
-      {/* Popup Response Box */}
-      {showPopup && (
+      
+      {response && (
         <div className="popup">
           <div className="popup-content">
-            <button className="close-btn" onClick={() => setShowPopup(false)}>❌</button>
-            <h3>Response</h3>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{response}</ReactMarkdown>
+            <button className="close-btn" onClick={() => setResponse(null)}>X</button>
+            <ReactMarkdown>{response}</ReactMarkdown>
           </div>
         </div>
       )}
@@ -58,39 +54,25 @@ export const Main = () => {
           <p><span>Hello, Lewis</span></p>
           <p>How can I help you?</p>
         </div>
-        <div className="cards">
-          {[
-            { text: 'Suggest beautiful places to see on an upcoming road trip', icon: assets.compass_icon },
-            { text: 'Briefly summarize this concept: Urban Planning', icon: assets.bulb_icon },
-            { text: 'Brainstorm team activities for our work retreat', icon: assets.message_icon },
-            { text: 'Improve the readability of the following code', icon: assets.code_icon },
-          ].map((item, index) => (
-            <div key={index} className="card" onClick={() => setPrompt(item.text)}>
-              <p>{item.text}</p>
-              <img src={item.icon} alt="Card Icon" />
-            </div>
-          ))}
-        </div>
-        <div className="main-bottom">
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Enter prompt"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-            <div>
-              <img src={assets.gallery_icon} alt="Gallery" />
-              <img src={assets.mic_icon} alt="Mic" />
-              <img src={assets.send_icon} alt="Send" onClick={handleSend} />
-            </div>
+
+        <div className="search-box">
+          <input 
+            type="text"
+            placeholder="Enter prompt"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
+          <div>
+            <img src={assets.gallery_icon} alt="" />
+            <img src={assets.mic_icon} alt="" />
+            <img src={assets.send_icon} alt="" onClick={sendMessage} />
           </div>
-          {loading && <Loader />}
-          <p className="bottom-info">Gemini may display incorrect information.</p>
         </div>
+
+        {loading && <p className="loading">Processing...</p>}
+
       </div>
     </div>
   );
 };
-
-export default Main;
