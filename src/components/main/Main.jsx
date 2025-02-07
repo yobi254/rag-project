@@ -9,11 +9,13 @@ export const Main = () => {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
     setLoading(true);
     setResponse('');
+    setShowPopup(false);
 
     try {
       const res = await fetch('http://localhost:8000/ask', {
@@ -24,8 +26,10 @@ export const Main = () => {
 
       const data = await res.json();
       setResponse(data.answer || 'No response received.');
+      setShowPopup(true);
     } catch (error) {
       setResponse('Error fetching response.');
+      setShowPopup(true);
     } finally {
       setLoading(false);
     }
@@ -37,6 +41,18 @@ export const Main = () => {
         <p>Gemini</p>
         <img src={assets.user_icon} alt="User Icon" />
       </div>
+
+      {/* Popup Response Box */}
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <button className="close-btn" onClick={() => setShowPopup(false)}>❌</button>
+            <h3>Response</h3>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{response}</ReactMarkdown>
+          </div>
+        </div>
+      )}
+
       <div className="main-container">
         <div className="greet">
           <p><span>Hello, Lewis</span></p>
@@ -70,11 +86,6 @@ export const Main = () => {
             </div>
           </div>
           {loading && <Loader />}
-          {response && (
-            <div className="response-box">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{response}</ReactMarkdown>
-            </div>
-          )}
           <p className="bottom-info">Gemini may display incorrect information.</p>
         </div>
       </div>
