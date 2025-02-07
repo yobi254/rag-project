@@ -344,3 +344,29 @@
     transform: translateY(0);
   }
 }
+
+/* Inline Code (within a sentence) */
+.popup-content code {
+  background: rgba(0, 0, 0, 0.1);
+  color: #d63384;  /* A nice pinkish color for contrast */
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Code Blocks (multi-line) */
+.popup-content pre {
+  background: #282c34; /* Dark background */
+  color: #ffffff; /* White text */
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Ensure code inside <pre> is styled correctly */
+.popup-content pre code {
+  background: none;
+  color: #ffffff;
+}
