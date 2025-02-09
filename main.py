@@ -36,7 +36,7 @@ def search_similar_embeddings(query, top_k=3):
     return results
 
 def generate_answer_from_deployed_model(context, query):
-  client = Client("lewisnjue/mistralai-Mistral-7B-Instruct-v0.3") 
+  client = Client("weleeyobi/mistralai-Mistral-7B-Instruct-v0.3") 
   prompt = f"Answer the following question based on the context:\n\nContext: {context}\n\nQuestion: {query}\n\nAnswer:"
 
   result = client.predict(
