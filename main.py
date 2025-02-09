@@ -9,7 +9,8 @@ from upstash_vector import Index, Vector
 import os 
 load_dotenv()
 UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN")
-INDEX_URL = os.getenv("INDEX_URL")
+UPTASH_TOKEN = "ABkFMHVwcmlnaHQtYW5jaG92eS00NzA4NS11czFhZG1pbll6ZG1abVUxTmprdE1tWmpNQzAwTWpnekxUazJZbVl0WTJKaU0yWmxPRGhsWVRJNA=="
+INDEX_URL = "https://upright-anchovy-47085-us1-vector.upstash.io"
 
 index = Index(url=INDEX_URL, token=UPSTASH_TOKEN)
 
